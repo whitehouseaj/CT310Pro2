@@ -56,14 +56,7 @@ class Controller_Florida extends Controller
 
 		$content = View::forge('Florida/welcome');
         
-        $layout->content = Response::forge($content);/*
-		$AttractionString;*/
-
-		//this loop converts all courses to a single string and stores them in $CoursesString
-// 		foreach($attractions as $key=>$attraction)
-// 		{
-// 			$AttractionString[$key] = $attraction['attractionID']." ".$attraction['attractionName']." ".$attraction['description']." ".$attraction['imgPath'];
-// 		}
+        $layout->content = Response::forge($content);
 
         return $layout;
 	}	
@@ -80,9 +73,11 @@ class Controller_Florida extends Controller
 	
 	}
 	
-	//passing the parameter $id to determine which attraction to load
-	public function attraction($id){
-    
+	public function action_welcome(){
+        
+//         $query = DB::select('firstName')->from('students')->where('age', 19)->execute();
+//         
+//         print_r($query);
         
         $layout = View::forge('Florida/layout');
 
@@ -94,6 +89,15 @@ class Controller_Florida extends Controller
 	
 	}
 	
+    public function action_universal(){
+        
+        $layout = View::forge('Florida/layout');
+
+        $content = View::forge('Florida/universal');
+
+		return $layout;
+	
+	}
 	
     public function action_aboutus(){
         
@@ -132,10 +136,6 @@ class Controller_Florida extends Controller
 	}
 	
     public function action_index(){
-
-//         $query = DB::select('firstName')->from('students')->where('age', 19)->execute();
-//         
-//         print_r($query);
     
 		//load the layout
 		$layout = View::forge('Florida/layout');
@@ -146,17 +146,19 @@ class Controller_Florida extends Controller
 		//get all courses using the ORM object
 		$attractions = OrmFlorida::find('all');
 
+		$AttractionString;
+
+		//this loop converts all courses to a single string and stores them in $CoursesString
+		foreach($attractions as $key=>$attraction)
+		{
+			$AttractionString[$key] = $attraction['attractionID']." ".$attraction['attractionName']." ".$attraction['description']." ".$attraction['imgPath'];
+		}
+
 		//set the courses to the view for printing
-		//something is happening here
-		//demos is the variable from the database
-		$content->set_safe('demos', $attractions);
-		
-		
+		$content->set_safe('demos', $AttractionString);
 
 		//forge inner view
 		$layout->content = Response::forge($content);
-		
-		$layout->set_safe('demos', $attractions);
 
 		return $layout;
 	}
